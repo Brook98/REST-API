@@ -1,0 +1,8 @@
+{
+"name" : "REST API Documentation",
+"version" : "1.0.0",
+"description": "REST API for a city database",
+"template": {
+	"forceLanguage" : "en"
+ }
+}
