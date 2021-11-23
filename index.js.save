@@ -1,0 +1,27 @@
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+const dbConn = require('./queries')
+const port = 3000
+
+restAPIs.use(bodyParser.json())re.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
+
+
+
+app.get('/read', (request, response) => {
+ const name = parseInt(request.params.name)
+
+dbConn.query('SELECT * FROM city WHERE name = $1', [name], function(error, results){
+ if(!err){
+  response.json(rows)
+}
+});
+});
+
+app.listen(port, () => {
+  console.log(`App running`)
+})

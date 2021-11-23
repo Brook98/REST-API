@@ -1,0 +1,78 @@
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+const dbConn = require('./queries')
+const port = 3000
+
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
+
+app.post('/insert', (req, res) => {
+
+const {id, name, countryCode, district, population} = req.body
+var sql = 'INSERT INTO city (ID, Name, CountryCode, District, Population) VALUES (?, ?, ?, ?, ?)';
+var inserts = [id, name, countryCode, district, population];
+sql = dbConn.format(sql, inserts);
+
+dbConn.query(sql, function(err, rows){
+ if(!err){
+     res.json({"status": "succes"})
+}
+else {
+res.json(err)
+}
+})
+});
+
+
+app.get('/read', (req, res) => {
+const {name} = req.body
+dbConn.query('SELECT * FROM city WHERE Name = ?', function(err, rows){
+ if(!err){
+  res.json(rows)
+}
+});
+});
+
+app.post('/update', (req, res) => {
+
+const {name, population} = req.body
+
+var sqlupdate = 'UPDATE city SET Population = ? WHERE Name = ? ';
+var inserts = [population, name];
+sqlupdate = dbConn.format(sqlupdate, inserts);
+
+dbConn.query(sqlupdate, function(err, rows) {
+ if(!err){
+     res.json({"status": "succes"})
+}
+else{
+res.json(err)
+}
+})
+});
+
+app.post('/delete', (req, res) => {
+
+const name = req.body
+
+var sqldelete = 'DELETE FROM city WHERE Name = ? ';
+var inserts = [name];
+sqldelete = dbConn.format(sqldelete, inserts);
+
+dbConn.query(sqldelete, function(err, rows) {
+ if(!err){
+     console.log('true')}
+else {
+    console.log('false')
+}
+})
+});
+
+app.listen(port, () => {
+  console.log(`App running`)
+})
